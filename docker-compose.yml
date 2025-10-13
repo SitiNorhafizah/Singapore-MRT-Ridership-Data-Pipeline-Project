@@ -1,0 +1,248 @@
+services:
+  # Zookeeper
+  zookeeper:
+    image: zookeeper:3.9
+    container_name: zookeeper
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_CLIENT_PORT: 2181
+      ZOO_DATA_DIR: /data
+    ports:
+      - "2181:2181"
+      - "8080:8080"
+    networks:
+      - mrt_network
+    volumes:
+      - zookeeper_data:/data
+      - zookeeper_datalog:/datalog
+    healthcheck:
+      test: ["CMD-SHELL", "echo ruok | timeout 5 nc localhost 2181 || exit 1"]
+      interval: 10s
+      retries: 3
+      start_period: 20s
+      timeout: 5s
+
+  # Kafka
+  kafka:
+    image: confluentinc/cp-kafka:7.0.1
+    container_name: kafka
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      # Listeners for host and internal Docker network
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_INTERNAL://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    networks:
+      - mrt_network
+    healthcheck:
+      test: ["CMD", "nc", "-z", "0.0.0.0", "9092"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+
+  # Hadoop NameNode
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
+    container_name: namenode
+    environment:
+      CLUSTER_NAME: hadoop
+    ports:
+      - "9870:9870"
+    networks:
+      - mrt_network
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+      - ./mrt_project_dbt:/home/dbt_project
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:50070/"]
+      interval: 10s
+      retries: 10
+      start_period: 20s
+      timeout: 5s
+
+  # Hadoop DataNode
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+    container_name: datanode
+    depends_on:
+      namenode:
+        condition: service_healthy
+    networks:
+      - mrt_network
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+    environment:
+      CORE_CONF_fs_defaultFS: "hdfs://namenode:8020"
+      HDFS_CONF_dfs_datanode_data_dir_perm: "750"
+      HDFS_CONF_dfs_datanode_du_reserved: "0"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://datanode:50075/"]
+      interval: 10s
+      retries: 10
+      start_period: 20s
+      timeout: 5s
+
+  # Postgres for Hive Metastore
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_DB: metastore_db
+      POSTGRES_USER: mrt_user
+      POSTGRES_PASSWORD: mrt_pass
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - mrt_network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "mrt_user"]
+      interval: 10s
+      retries: 10
+      start_period: 10s
+      timeout: 5s
+
+  # Hive Metastore
+  hive-metastore:
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    container_name: hive-metastore
+    depends_on:
+      postgres:
+        condition: service_healthy
+      namenode:
+        condition: service_healthy
+      datanode:
+        condition: service_healthy
+    environment:
+      HDFS_NAMENODE: namenode:8020
+      HIVE_METASTORE_USER: mrt_user
+      HIVE_METASTORE_PASSWORD: mrt_pass
+      HIVE_METASTORE_DB: metastore_db
+      HIVE_METASTORE_HOST: postgres
+      HIVE_METASTORE_PORT: 5432
+      HIVE_AUX_JARS_PATH: /opt/hive/lib/aws-java-sdk-1.7.4.jar,/opt/hive/lib/hadoop-aws-2.7.4.jar,/opt/hive/lib/jackson-core-2.6.5.jar,/opt/hive/lib/jackson-annotations-2.6.5.jar,/opt/hive/lib/jackson-databind-2.6.5.jar,/opt/hive/lib/guava-14.0.1.jar
+      HADOOP_CLASSPATH: /opt/hive/lib/aws-java-sdk-1.7.4.jar:/opt/hive/lib/hadoop-aws-2.7.4.jar:/opt/hive/lib/jackson-core-2.6.5.jar:/opt/hive/lib/jackson-annotations-2.6.5.jar:/opt/hive/lib/jackson-databind-2.6.5.jar:/opt/hive/lib/guava-14.0.1.jar
+    volumes:
+      - ./conf/hive-site.xml:/opt/hive/conf/hive-site.xml
+      - ./conf/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./conf/core-site.xml:/opt/hive/conf/core-site.xml
+      - ./conf/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./jars/aws-java-sdk-1.7.4.jar:/opt/hive/lib/aws-java-sdk-1.7.4.jar
+      - ./jars/hadoop-aws-2.7.4.jar:/opt/hive/lib/hadoop-aws-2.7.4.jar
+      - ./jars/jackson-core-2.6.5.jar:/opt/hive/lib/jackson-core-2.6.5.jar
+      - ./jars/jackson-annotations-2.6.5.jar:/opt/hive/lib/jackson-annotations-2.6.5.jar
+      - ./jars/jackson-databind-2.6.5.jar:/opt/hive/lib/jackson-databind-2.6.5.jar
+      - ./jars/guava-14.0.1.jar:/opt/hive/lib/guava-14.0.1.jar
+    networks:
+      - mrt_network
+    entrypoint: ["/bin/bash", "-c", "set +H && /opt/hive/bin/hive --service metastore"]
+    healthcheck:
+      test: ["CMD", "nc", "-z", "0.0.0.0", "9083"]
+      interval: 10s
+      retries: 10
+      start_period: 20s
+      timeout: 5s
+
+  # HiveServer2
+  hive-server:
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    container_name: hive-server
+    depends_on:
+      hive-metastore:
+        condition: service_healthy
+      namenode:
+        condition: service_healthy
+      datanode:
+        condition: service_healthy
+    environment:
+      HIVE_METASTORE_URI: thrift://hive-metastore:9083
+      HIVE_CORE_CONF_fs_defaultFS: hdfs://namenode:8020
+      HIVE_AUX_JARS_PATH: /opt/hive/lib/aws-java-sdk-1.7.4.jar,/opt/hive/lib/hadoop-aws-2.7.4.jar,/opt/hive/lib/jackson-core-2.6.5.jar,/opt/hive/lib/jackson-annotations-2.6.5.jar,/opt/hive/lib/jackson-databind-2.6.5.jar,/opt/hive/lib/guava-14.0.1.jar
+      HADOOP_CLASSPATH: /opt/hive/lib/aws-java-sdk-1.7.4.jar:/opt/hive/lib/hadoop-aws-2.7.4.jar:/opt/hive/lib/jackson-core-2.6.5.jar:/opt/hive/lib/jackson-annotations-2.6.5.jar:/opt/hive/lib/jackson-databind-2.6.5.jar:/opt/hive/lib/guava-14.0.1.jar
+    ports:
+      - "10000:10000"
+    volumes:
+      - ./conf/hive-site.xml:/opt/hive/conf/hive-site.xml
+      - ./conf/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml
+      - ./conf/core-site.xml:/opt/hive/conf/core-site.xml
+      - ./conf/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml
+      - ./jars/aws-java-sdk-1.7.4.jar:/opt/hive/lib/aws-java-sdk-1.7.4.jar
+      - ./jars/hadoop-aws-2.7.4.jar:/opt/hive/lib/hadoop-aws-2.7.4.jar
+      - ./jars/jackson-core-2.6.5.jar:/opt/hive/lib/jackson-core-2.6.5.jar
+      - ./jars/jackson-annotations-2.6.5.jar:/opt/hive/lib/jackson-annotations-2.6.5.jar
+      - ./jars/jackson-databind-2.6.5.jar:/opt/hive/lib/jackson-databind-2.6.5.jar
+      - ./jars/guava-14.0.1.jar:/opt/hive/lib/guava-14.0.1.jar
+    networks:
+      - mrt_network
+
+  # Superset
+  superset:
+    image: apache/superset:2.1.2
+    container_name: superset
+    depends_on:
+      hive-server:
+        condition: service_started
+    ports:
+      - "8088:8088"
+    volumes:
+      - superset_home:/app/superset_home
+      - ./superset_home/python_path/superset_config.py:/app/pythonpath/superset_config.py
+    environment:
+      SUPERSET_HOME: /app/superset_home
+    networks:
+      - mrt_network
+
+  # MinIO
+  minio:
+    image: minio/minio
+    container_name: minio
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio1234
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      mrt_network:
+        aliases:
+        - minio 
+    volumes:
+      - minio_data:/data
+
+  # Prefect
+  prefect:
+    image: prefecthq/prefect:2.10.13-python3.9
+    container_name: prefect
+    command: >
+      bash -c "prefect orion start --host 0.0.0.0"
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./prefect:/opt/mrt_project/prefect
+    environment:
+      - PREFECT_API_URL=http://localhost:4200/api
+    networks:
+      - mrt_network
+
+networks:
+  mrt_network:
+    driver: bridge
+
+volumes:
+  pg_data:
+  minio_data:
+  hadoop_namenode:
+  hadoop_datanode:
+  zookeeper_data:
+  zookeeper_datalog:
+  superset_home:
+

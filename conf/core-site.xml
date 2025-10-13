@@ -1,0 +1,58 @@
+<configuration>
+    <!-- Default filesystem: HDFS -->
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://namenode:8020</value>
+    </property>
+
+    <!-- S3A implementation -->
+    <property>
+        <name>fs.s3a.impl</name>
+        <value>org.apache.hadoop.fs.s3a.S3AFileSystem</value>
+    </property>
+
+    <!-- S3A general endpoint -->
+    <property>
+        <name>fs.s3a.endpoint</name>
+        <value>http://172.20.0.3:9000</value>
+    </property>
+
+    <!-- MinIO credentials -->
+    <property>
+        <name>fs.s3a.access.key</name>
+        <value>minio</value>
+    </property>
+
+    <property>
+        <name>fs.s3a.secret.key</name>
+        <value>minio1234</value>
+    </property>
+
+    <!-- Force path-style access (disable virtual-host style) -->
+    <property>
+        <name>fs.s3a.path.style.access</name>
+        <value>true</value>
+    </property>
+
+    <!-- Disable SSL since MinIO in this setup is HTTP -->
+    <property>
+        <name>fs.s3a.connection.ssl.enabled</name>
+        <value>false</value>
+    </property>
+
+    <!-- Optional: timeout/retry settings to avoid connection issues -->
+    <property>
+        <name>fs.s3a.connection.maximum</name>
+        <value>100</value>
+    </property>
+
+    <property>
+        <name>fs.s3a.attempts.maximum</name>
+        <value>20</value>
+    </property>
+
+    <property>
+        <name>fs.s3a.retry.limit</name>
+        <value>10</value>
+    </property>
+</configuration>

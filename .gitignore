@@ -1,0 +1,17 @@
+# Docker volumes / persistent data
+postgres_data/
+data/
+superset_home/
+minio_data/
+hadoop_namenode/
+hadoop_datanode/
+zookeeper_data/
+zookeeper_datalog/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env

@@ -1,0 +1,85 @@
+version: 2
+
+# SOURCES
+sources:
+  - name: bronze
+    schema: bronze  # Postgres schema
+    tables:
+      - name: alerts
+        description: "Bronze alerts table in Postgres"
+      - name: station_exits
+        description: "Bronze station exits table in Postgres"
+      - name: ridership
+        description: "Bronze ridership table in Postgres"
+
+  - name: gold_silver
+    schema: gold_silver  # Hive database/schema for gold/silver tables
+    tables:
+      - name: dim_station
+        description: "Dimension table for MRT stations in gold_silver schema"
+
+# MODELS
+models:
+  - name: dim_station
+    description: "Dimension table for MRT stations"
+    columns:
+      - name: station_id
+        description: "Unique identifier for station"
+        tests:
+          - not_null
+          - unique
+      - name: station_name
+        description: "Name of MRT station"
+        tests:
+          - not_null
+
+  - name: fact_ridership
+    description: "Aggregated ridership fact table"
+    columns:
+      - name: station_id
+        description: "Reference to station_id in dim_station"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_station')
+              field: station_id
+      - name: ride_date
+        description: "Date of ridership record"
+        tests:
+          - not_null
+
+  - name: fact_alerts
+    description: "Processed alerts fact table"
+    columns:
+      - name: alert_id
+        description: "Unique identifier for each alert"
+        tests:
+          - not_null
+          - unique
+      - name: alert_message
+        description: "Alert message content"
+        tests:
+          - not_null
+      - name: alert_time
+        description: "Timestamp of alert"
+        tests:
+          - not_null
+      - name: station_name_guess
+        description: "Station name temporarily extracted from message"
+
+  - name: gold_alerts_summary
+    description: "Aggregated gold alerts table with station info"
+    columns:
+      - name: alert_id
+        description: "Unique alert identifier"
+      - name: alert_message
+        description: "Content of the alert"
+      - name: alert_ts
+        description: "Timestamp of alert"
+      - name: alert_day
+        description: "Date of alert"
+      - name: station_id
+        description: "Station ID from dim_station"
+      - name: station_name
+        description: "Station name from dim_station"
+

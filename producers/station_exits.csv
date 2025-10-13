@@ -1,0 +1,140 @@
+station_id,station_name,latitude,longitude,exits
+NS1,Jurong East,1.332,103.743,4
+NS2,Bukit Batok,1.350,103.747,2
+NS3,Bukit Timah,1.352,103.776,2
+NS4,Newton,1.310,103.839,3
+NS5,Orchard,1.304,103.831,5
+NS6,Somerset,1.300,103.839,3
+NS7,Dhoby Ghaut,1.295,103.845,4
+NS8,City Hall,1.291,103.850,5
+NS9,Raffles Place,1.283,103.851,6
+NS10,Marina Bay,1.283,103.860,5
+EW1,Pasir Ris,1.375,103.946,4
+EW2,Tampines,1.352,103.945,3
+EW3,Simei,1.344,103.948,2
+EW4,Tanah Merah,1.320,103.951,4
+EW5,Bedok,1.321,103.944,4
+EW6,Kembangan,1.315,103.916,3
+EW7,Bedok Reservoir,1.327,103.914,2
+EW8,Eastwood,1.325,103.905,3
+EW9,Changi,1.327,103.991,5
+EW10,Changi Airport,1.364,103.991,6
+NE1,HarbourFront,1.265,103.819,4
+NE2,Outram Park,1.283,103.838,5
+NE3,Chinatown,1.283,103.845,4
+NE4,Clarke Quay,1.289,103.847,3
+NE5,Dhoby Ghaut,1.295,103.845,4
+NE6,Little India,1.306,103.849,5
+NE7,Bugis,1.300,103.858,4
+NE8,Serangoon,1.314,103.867,3
+NE9,Kovan,1.357,103.876,3
+NE10,Hougang,1.375,103.891,4
+CC1,Esplanade,1.290,103.855,3
+CC2,Promenade,1.291,103.860,4
+CC3,Marina Bay,1.283,103.860,5
+CC4,Telok Blangah,1.276,103.819,4
+CC5,Haw Par Villa,1.267,103.786,3
+CC6,Pasir Panjang,1.264,103.774,2
+CC7,West Coast,1.285,103.764,3
+CC8,One-North,1.289,103.785,4
+CC9,Buona Vista,1.305,103.789,5
+CC10,Holland Village,1.313,103.800,3
+CC11,Farrer Road,1.315,103.818,4
+CC12,Dover,1.313,103.790,3
+CC13,Queenstown,1.296,103.802,2
+CC14,Redhill,1.290,103.805,3
+CC15,Commonwealth,1.285,103.803,4
+CC16,Queenstown,1.296,103.802,2
+CC17,Redhill,1.290,103.805,3
+CC18,Commonwealth,1.285,103.803,4
+CC19,Queenstown,1.296,103.802,2
+CC20,Redhill,1.290,103.805,3
+CC21,Commonwealth,1.285,103.803,4
+CC22,Queenstown,1.296,103.802,2
+CC23,Redhill,1.290,103.805,3
+CC24,Commonwealth,1.285,103.803,4
+CC25,Queenstown,1.296,103.802,2
+CC26,Redhill,1.290,103.805,3
+CC27,Commonwealth,1.285,103.803,4
+CC28,Queenstown,1.296,103.802,2
+CC29,Redhill,1.290,103.805,3
+CC30,Commonwealth,1.285,103.803,4
+CC31,Queenstown,1.296,103.802,2
+CC32,Redhill,1.290,103.805,3
+CC33,Commonwealth,1.285,103.803,4
+CC34,Queenstown,1.296,103.802,2
+CC35,Redhill,1.290,103.805,3
+CC36,Commonwealth,1.285,103.803,4
+CC37,Queenstown,1.296,103.802,2
+CC38,Redhill,1.290,103.805,3
+CC39,Commonwealth,1.285,103.803,4
+CC40,Queenstown,1.296,103.802,2
+CC41,Redhill,1.290,103.805,3
+CC42,Commonwealth,1.285,103.803,4
+CC43,Queenstown,1.296,103.802,2
+CC44,Redhill,1.290,103.805,3
+CC45,Commonwealth,1.285,103.803,4
+CC46,Queenstown,1.296,103.802,2
+CC47,Redhill,1.290,103.805,3
+CC48,Commonwealth,1.285,103.803,4
+CC49,Queenstown,1.296,103.802,2
+CC50,Redhill,1.290,103.805,3
+CC51,Commonwealth,1.285,103.803,4
+CC52,Queenstown,1.296,103.802,2
+CC53,Redhill,1.290,103.805,3
+CC54,Commonwealth,1.285,103.803,4
+CC55,Queenstown,1.296,103.802,2
+CC56,Redhill,1.290,103.805,3
+CC57,Commonwealth,1.285,103.803,4
+CC58,Queenstown,1.296,103.802,2
+CC59,Redhill,1.290,103.805,3
+CC60,Commonwealth,1.285,103.803,4
+CC61,Queenstown,1.296,103.802,2
+CC62,Redhill,1.290,103.805,3
+CC63,Commonwealth,1.285,103.803,4
+CC64,Queenstown,1.296,103.802,2
+CC65,Redhill,1.290,103.805,3
+CC66,Commonwealth,1.285,103.803,4
+CC67,Queenstown,1.296,103.802,2
+CC68,Redhill,1.290,103.805,3
+CC69,Commonwealth,1.285,103.803,4
+CC70,Queenstown,1.296,103.802,2
+CC71,Redhill,1.290,103.805,3
+CC72,Commonwealth,1.285,103.803,4
+CC73,Queenstown,1.296,103.802,2
+CC74,Redhill,1.290,103.805,3
+CC75,Commonwealth,1.285,103.803,4
+CC76,Queenstown,1.296,103.802,2
+CC77,Redhill,1.290,103.805,3
+CC78,Commonwealth,1.285,103.803,4
+CC79,Queenstown,1.296,103.802,2
+CC80,Redhill,1.290,103.805,3
+CC81,Commonwealth,1.285,103.803,4
+CC82,Queenstown,1.296,103.802,2
+CC83,Redhill,1.290,103.805,3
+CC84,Commonwealth,1.285,103.803,4
+CC85,Queenstown,1.296,103.802,2
+CC86,Redhill,1.290,103.805,3
+CC87,Commonwealth,1.285,103.803,4
+CC88,Queenstown,1.296,103.802,2
+CC89,Redhill,1.290,103.805,3
+CC90,Commonwealth,1.285,103.803,4
+CC91,Queenstown,1.296,103.802,2
+CC92,Redhill,1.290,103.805,3
+CC93,Commonwealth,1.285,103.803,4
+CC94,Queenstown,1.296,103.802,2
+CC95,Redhill,1.290,103.805,3
+CC96,Commonwealth,1.285,103.803,4
+CC97,Queenstown,1.296,103.802,2
+CC98,Redhill,1.290,103.805,3
+CC99,Commonwealth,1.285,103.803,4
+CC100,Queenstown,1.296,103.802,2
+CC101,Redhill,1.290,103.805,3
+CC102,Commonwealth,1.285,103.803,4
+CC103,Queenstown,1.296,103.802,2
+CC104,Redhill,1.290,103.805,3
+CC105,Commonwealth,1.285,103.803,4
+CC106,Queenstown,1.296,103.802,2
+CC107,Red
+::contentReference[oaicite:3]{index=3}
+ 

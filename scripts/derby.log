@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Mon Sep 29 11:37:07 SGT 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0199-938b-a791-0000058e0c70 
+on database directory /home/ctnorhafizah/mrt_project/scripts/metastore_db with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@5ffd2b27 
+Loaded from file:/opt/spark/spark-3.2.1-bin-hadoop3.2/jars/derby-10.14.2.0.jar
+java.vendor=Ubuntu
+java.runtime.version=11.0.28+6-post-Ubuntu-1ubuntu124.04.1
+user.dir=/home/ctnorhafizah/mrt_project/scripts
+os.name=Linux
+os.arch=amd64
+os.version=6.14.0-29-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
