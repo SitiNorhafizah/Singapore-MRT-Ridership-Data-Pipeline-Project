@@ -1,0 +1,53 @@
+###
+### A complete description of a Prefect Deployment for flow 'MRT Crowd ETL Demo'
+###
+name: mrt-etl-demo-deployment
+description: null
+version: 2fdd4bff1a437ed5f8191957074959fa
+# The work queue that will handle this deployment's runs
+work_queue_name: default
+work_pool_name: default-agent-pool
+tags: []
+parameters: {}
+schedule:
+  interval: 60.0
+  anchor_date: '2025-10-14T03:38:38.404742+00:00'
+  timezone: UTC
+is_schedule_active: false
+infra_overrides: {}
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: MRT Crowd ETL Demo
+manifest_path: null
+infrastructure:
+  type: process
+  env: {}
+  labels: {}
+  name: null
+  command: null
+  stream_output: true
+  working_dir: null
+  _block_document_id: 9924b0d8-2770-43d2-8df3-08f2d773a399
+  _block_document_name: anonymous-5b53a0b9-97df-4855-b2cb-329b927b4e99
+  _is_anonymous: true
+  block_type_slug: process
+  _block_type_slug: process
+storage: null
+path: /home/ctnorhafizah/mrt_project/producers
+entrypoint: prefect_mrt_demo.py:mrt_etl_demo
+parameter_openapi_schema:
+  title: Parameters
+  type: object
+  properties:
+    file_path:
+      title: file_path
+      default: /data/PCDRealTime.json
+      position: 0
+      type: string
+  required: null
+  definitions: null
+timestamp: '2025-10-14T03:38:38.405090+00:00'
+triggers: []
+enforce_parameter_schema: null
