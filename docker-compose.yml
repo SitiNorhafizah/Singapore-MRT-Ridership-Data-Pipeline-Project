@@ -194,7 +194,7 @@ services:
       - "8088:8088"
     volumes:
       - superset_home:/app/superset_home
-      - /home/ctnorhafizah/mrt_project_backup/superset_home/python_path/superset_config.py:/app/pythonpath/superset_config.py
+      - ./superset_home/python_path/superset_config.py:/app/pythonpath/superset_config.py
     environment:
       SUPERSET_HOME: /app/superset_home
     networks:
@@ -220,16 +220,16 @@ services:
 
   # Prefect
   prefect:
-    image: prefecthq/prefect:2.14.10-python3.9
+    image: prefecthq/prefect:2.10.13-python3.9
     container_name: prefect
     command: >
-      bash -c "prefect server start --host 0.0.0.0"
+      bash -c "prefect orion start --host 0.0.0.0"
     ports:
       - "4200:4200"
     volumes:
-      - /home/ctnorhafizah/mrt_project/prefect_db:/data
+      - ./prefect:/opt/mrt_project/prefect
     environment:
-      PREFECT_SERVER_DATABASE_CONNECTION_URL: sqlite:////data/prefect.db
+      - PREFECT_API_URL=http://localhost:4200/api
     networks:
       - mrt_network
 
