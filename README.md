@@ -32,6 +32,8 @@ Prefect is included as a demonstration of ETL orchestration and automation.
 5. Automate ETL runs using Prefect (demo purpose).
 
 ---
+## 📂 Repository Structure
+
 mrt_project/
 ├── producers/ # Kafka producers for MRT JSON data
 ├── hive/ # Hive SQL transformation scripts
@@ -48,6 +50,4 @@ mrt_project/
 **Fiza Rooslan**  
 Aspiring Data Engineer | Singapore  
 Building scalable ETL pipelines and real-time analytics solutions.
-
-## 📂 Repository Structure
 
